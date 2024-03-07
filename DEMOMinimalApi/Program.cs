@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
+using DEMOMinimalApi.Data.DatabaseContext;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MinApiDemo")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -20,9 +22,8 @@ app.UseHttpsRedirection();
 
 app.MapGet("/Posts", () =>
 {
-    // for testing purposes to be removed later
-    return new Post() {UserId= 1,Id = 1, Title = "test" , Body = "test" };
-
+    // to implement
+    
 });
 
 app.MapGet("/Posts/{id}", (int id) =>
@@ -54,7 +55,7 @@ public class Post
 {
     public int UserId { get; set; }
     public int Id { get; set; }
-    public string Title { get; set; }
-    public string Body { get; set; }
+    public string? Title { get; set; }
+    public string? Body { get; set; }
 }
 
