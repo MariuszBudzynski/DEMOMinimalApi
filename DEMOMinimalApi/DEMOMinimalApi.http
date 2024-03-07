@@ -1,0 +1,6 @@
+@DEMOMinimalApi_HostAddress = http://localhost:5124
+
+GET {{DEMOMinimalApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
