@@ -1,4 +1,9 @@
+using DEMOMinimalApi.Data.AutoDataLoader;
 using DEMOMinimalApi.Data.DatabaseContext;
+using DEMOMinimalApi.Data.Operations;
+using DEMOMinimalApi.Data.Operations.Interfaces;
+using DEMOMinimalApi.Repository;
+using DEMOMinimalApi.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,10 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MinApiDemo")));
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<LoadData>();
+builder.Services.AddScoped<IAutoLoadDataUseCase, AutoLoadDataUseCase>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+//is used to retrieve the instance of the service injected into the container
+var loadData = app.Services.CreateScope().ServiceProvider.GetRequiredService<LoadData>();
+await loadData.LoadDataJSON("https://jsonplaceholder.typicode.com/posts");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -58,4 +70,3 @@ public class Post
     public string? Title { get; set; }
     public string? Body { get; set; }
 }
-
