@@ -3,16 +3,16 @@ using DEMOMinimalApi.Repository.Interfaces;
 
 namespace DEMOMinimalApi.Data.Operations
 {
-    public class AutoLoadDataUseCase : IAutoLoadDataUseCase
+    public class SavePostsUseCase : ISavePostsUseCase<Post>
     {
-        private readonly IPostRepository _repository;
+        private readonly IRepository<Post> _repository;
 
-        public AutoLoadDataUseCase(IPostRepository repository)
+        public SavePostsUseCase(IRepository<Post> repository)
         {
             _repository = repository;
         }
 
-        public async Task ExecuteAsync<T>(List<T> posts) where T : class
+        public async Task ExecuteAsync(List<Post> posts)
         {
             await _repository.SavaData(posts);
         }

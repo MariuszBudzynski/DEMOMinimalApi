@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DEMOMinimalApi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240307130246_InitialMigration")]
+    [Migration("20240308085943_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -26,11 +26,11 @@ namespace DEMOMinimalApi.Migrations
 
             modelBuilder.Entity("Post", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
                     b.Property<string>("Body")
                         .HasColumnType("nvarchar(max)");
@@ -38,10 +38,7 @@ namespace DEMOMinimalApi.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Posts");
                 });
