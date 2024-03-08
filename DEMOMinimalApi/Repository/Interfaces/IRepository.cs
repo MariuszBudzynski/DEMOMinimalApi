@@ -2,6 +2,7 @@
 {
     public interface IRepository<T> where T : class
     {
-        Task SavaData(List<T> data);
+        Task FirstLoadDataSave(List<T> data);
+        Task<List<T>> GetAllData();
     }
 }

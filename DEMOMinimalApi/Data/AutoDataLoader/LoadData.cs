@@ -5,12 +5,12 @@ namespace DEMOMinimalApi.Data.AutoDataLoader
 {
     public class LoadData
     {
-        private readonly ISavePostsUseCase<Post> _savePostsUseCase;
+        private readonly FirstLoadDataSaveUseCase<Post> _savePostsUseCase;
         private readonly string url = "https://jsonplaceholder.typicode.com/posts";
 
         HttpClient client = new HttpClient();
 
-        public LoadData(ISavePostsUseCase<Post> savePostsUseCase)
+        public LoadData(FirstLoadDataSaveUseCase<Post> savePostsUseCase)
         {
             _savePostsUseCase = savePostsUseCase;
         }
@@ -18,6 +18,7 @@ namespace DEMOMinimalApi.Data.AutoDataLoader
         { 
             string response = await client.GetStringAsync(url);
             List<Post>? posts = JsonConvert.DeserializeObject<List<Post>>(response);
+            
             await SavePostsToTheDatabase(posts);
         }
 

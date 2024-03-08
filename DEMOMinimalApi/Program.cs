@@ -12,9 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MinApiDemo")));
-builder.Services.AddScoped<IRepository<Post>, Repository>();
+builder.Services.AddScoped<IRepository<Post>, PostRepository>();
 builder.Services.AddScoped<LoadData>();
-builder.Services.AddScoped<ISavePostsUseCase<Post>, SavePostsUseCase>();
+builder.Services.AddScoped<FirstLoadDataSaveUseCase<Post>, FirstLoadDataSaveUseCase>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -66,7 +66,10 @@ app.Run();
 public class Post
 {
     [Key]
+    public int Id { get; set; }
+    public int PostId { get; set; }
     public int UserId { get; set; }
     public string? Title { get; set; }
     public string? Body { get; set; }
+    public int HasBeenDeleted { get; set; } = 0;
 }
