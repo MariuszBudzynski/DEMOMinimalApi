@@ -15,7 +15,11 @@ builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(b
 builder.Services.AddScoped<IRepository<Post>, PostRepository>();
 builder.Services.AddScoped<LoadData>();
 builder.Services.AddScoped<IFirstLoadDataSaveUseCase<Post>, FirstLoadDataSaveUseCase>();
-builder.Services.AddScoped<IGetAllPostsUseCase<Post>, GetAllPostsUseCase>();
+builder.Services.AddScoped<IGetAllUseCase<Post>, GetAllUseCase>();
+builder.Services.AddScoped<IGetByIdUseCase<Post>, GetByIdUseCase>();
+builder.Services.AddScoped<IDeleteDataUseCase<Post>, DeleteDataUseCase>();
+builder.Services.AddScoped<IAddDataUseCase<Post>, AddDataUseCase>();
+builder.Services.AddScoped<IUpdateDataUseCase<Post>, UpdateDataUseCase>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -34,32 +38,50 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/Posts", async (IGetAllPostsUseCase<Post> getAllPostsUseCase) =>
+app.MapGet("/Posts", async (IGetAllUseCase<Post> getAllPostsUseCase) =>
 {
     var data = await getAllPostsUseCase.ExecuteAsync();
     return Results.Ok(data);
     
 });
 
-app.MapGet("/Posts/{id}", (int id) =>
+app.MapGet("/Posts/{id}", async (int id,IGetByIdUseCase<Post> getPostByIdUseCase ) =>
 {
-   // to implement
+   var data = await getPostByIdUseCase.ExecuteAsync(id);
+
+    if (data == null)
+    {
+        return Results.NotFound();
+    }
+    return Results.Ok(data);
 
 });
 
-app.MapPost("/Posts",(Post post)=> 
+app.MapPost("/Posts",async (Post post,IAddDataUseCase<Post> addDataUseCase)=> 
 {
-    // to implement
+    var data = await addDataUseCase.ExecuteAsync(post);
+    return Results.Ok(data);
 });
 
-app.MapPut("/Posts", (Post post,int id) =>
+app.MapPut("/Posts", async (Post post,int id,IUpdateDataUseCase<Post> updateDataUseCase) =>
 {
-    // to implement
+   var data = await updateDataUseCase.ExecuteAsync(post, id);
+
+    if (data == null)
+    {
+        return Results.NotFound();
+    }
+    return Results.Ok(data);
 });
 
-app.MapDelete("/Posts/{id}", (int id) =>
+app.MapDelete("/Posts/{id}", async (int id,IDeleteDataUseCase<Post> deleteDataUseCase) =>
 {
-    // to implement
+    var data = await deleteDataUseCase.ExecuteAsync(id);
+    if (data == null)
+    {
+        return Results.NotFound();
+    }
+    return Results.NoContent();
 
 });
 

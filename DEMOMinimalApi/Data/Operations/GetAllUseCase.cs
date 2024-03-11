@@ -3,11 +3,11 @@ using DEMOMinimalApi.Repository.Interfaces;
 
 namespace DEMOMinimalApi.Data.Operations
 {
-    public class GetAllPostsUseCase : IGetAllPostsUseCase<Post>
+    public class GetAllUseCase : IGetAllUseCase<Post>
     {
         private readonly IRepository<Post> _repository;
 
-        public GetAllPostsUseCase(IRepository<Post> repository)
+        public GetAllUseCase(IRepository<Post> repository)
         {
             _repository = repository;
         }

@@ -40,8 +40,67 @@ namespace DEMOMinimalApi.Repository
 
         public async Task<List<Post>> GetAllData()
         {
-            var posts = await (_db.Posts).ToListAsync();
+            var posts = await (_db.Posts).Where(x=>x.HasBeenDeleted != 1).ToListAsync();
             return posts;
+        }
+
+        public async Task<Post> GetDataById(int id)
+        {
+            var post = (await GetAllData()).FirstOrDefault(x=>x.PostId==id);
+            return post;
+            
+        }
+
+        public async Task<Post> DeleteData(int id)
+        {
+            //soft delete
+            Post? data = await GetDataById(id);
+
+            if (data == null)
+            {
+                return data;
+            }
+            else
+            {
+                data.HasBeenDeleted = 1;
+                await _db.SaveChangesAsync();
+                return data;
+            }
+        }
+
+        public async Task<Post> AddData(Post post)
+        {
+            Post? data = await _db.Posts.FirstOrDefaultAsync(x => x.PostId == post.PostId);
+
+            if (data == null)
+            {
+                await _db.AddAsync(post);
+                await _db.SaveChangesAsync();       
+            }
+            else if (data.HasBeenDeleted == 1)
+            {
+                data.HasBeenDeleted = 0;
+                await _db.SaveChangesAsync();
+            }
+            return await GetDataById(post.PostId);
+        }
+
+
+        public async Task<Post> UpdateData(Post post,int id)
+        {
+            Post? data = await GetDataById(id);
+
+            if (data == null)
+            {
+                return data;
+            }
+            else
+            {
+                data.Title = post.Title;
+                data.Body = post.Body;
+                await _db.SaveChangesAsync();
+                return data;
+            }
         }
     }
 }
