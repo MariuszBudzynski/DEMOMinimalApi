@@ -3,8 +3,6 @@ using DEMOMinimalApi.Data.AutoDataLoader;
 using DEMOMinimalApi.Data.DatabaseContext;
 using DEMOMinimalApi.Data.Operations;
 using DEMOMinimalApi.Data.Operations.Interfaces;
-using DEMOMinimalApi.Repository;
-using DEMOMinimalApi.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
