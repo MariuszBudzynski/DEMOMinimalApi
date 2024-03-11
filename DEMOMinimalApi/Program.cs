@@ -14,7 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MinApiDemo")));
 builder.Services.AddScoped<IRepository<Post>, PostRepository>();
 builder.Services.AddScoped<LoadData>();
-builder.Services.AddScoped<FirstLoadDataSaveUseCase<Post>, FirstLoadDataSaveUseCase>();
+builder.Services.AddScoped<IFirstLoadDataSaveUseCase<Post>, FirstLoadDataSaveUseCase>();
+builder.Services.AddScoped<IGetAllPostsUseCase<Post>, GetAllPostsUseCase>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -33,9 +34,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/Posts", () =>
+app.MapGet("/Posts", async (IGetAllPostsUseCase<Post> getAllPostsUseCase) =>
 {
-    // to implement
+    var data = await getAllPostsUseCase.ExecuteAsync();
+    return Results.Ok(data);
     
 });
 
