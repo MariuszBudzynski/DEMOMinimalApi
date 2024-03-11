@@ -1,3 +1,4 @@
+using DEMOMinimalApi;
 using DEMOMinimalApi.Data.AutoDataLoader;
 using DEMOMinimalApi.Data.DatabaseContext;
 using DEMOMinimalApi.Data.Operations;
@@ -12,14 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MinApiDemo")));
-builder.Services.AddScoped<IRepository<Post>, PostRepository>();
-builder.Services.AddScoped<LoadData>();
-builder.Services.AddScoped<IFirstLoadDataSaveUseCase<Post>, FirstLoadDataSaveUseCase>();
-builder.Services.AddScoped<IGetAllUseCase<Post>, GetAllUseCase>();
-builder.Services.AddScoped<IGetByIdUseCase<Post>, GetByIdUseCase>();
-builder.Services.AddScoped<IDeleteDataUseCase<Post>, DeleteDataUseCase>();
-builder.Services.AddScoped<IAddDataUseCase<Post>, AddDataUseCase>();
-builder.Services.AddScoped<IUpdateDataUseCase<Post>, UpdateDataUseCase>();
+ServiceRegistration.AddPostServices(builder.Services);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
