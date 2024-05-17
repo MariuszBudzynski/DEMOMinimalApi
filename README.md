@@ -6,7 +6,7 @@ An application aimed at expanding my knowledge of REST API and other advanced co
 * SQL Server
 * EF Core
 * Clean Architecture
-* DI Injection
+* Dependency Injection
 * Minimal API (REST)
 
 ## How to Use
